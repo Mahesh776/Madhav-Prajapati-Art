@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Madhav Prajapati Art - Handmade Clay Diyas</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background-color: #F5F5DC;
+            color: #3E2723;
+        }
+
+        /* Skeleton Loader Styles */
+        .skeleton-loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #F5F5DC;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            transition: opacity 0.5s ease;
+        }
+
+        .skeleton-header {
+            height: 70px;
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+            margin-bottom: 20px;
+        }
+
+        .skeleton-hero {
+            height: 400px;
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+            margin: 20px;
+            border-radius: 15px;
+        }
+
+        .skeleton-products {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .skeleton-product {
+            height: 300px;
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+            border-radius: 10px;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        /* Main Content */
+        .main-content {
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .main-content.visible {
+            opacity: 1;
+        }
+
+        /* Header Styles */
+        header {
+            background: #3E2723;
+            padding: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo h1 {
+            color: #D4AF37;
+            font-size: 1.5rem;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .logo p {
+            color: #FF9933;
+            font-size: 0.8rem;
+            font-style: italic;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: #F5F5DC;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+
+        .nav-links a:hover {
+            background: #C1440E;
+        }
+
+        .cart-icon {
+            position: relative;
+        }
+
+        #cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #C1440E;
+            color: white;
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 0.7rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            height: 500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+        }
+
+        .hero-content h2 {
+            font-size: 3rem;
+            font-family: 'Playfair Display', serif;
+            color: #D4AF37;
+            margin-bottom: 1rem;
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        .cta-button {
+            background: #C1440E;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .cta-button:hover {
+            background: #FF9933;
+        }
+
+        /* Sale Banner */
+        .sale-banner {
+            background: linear-gradient(135deg, #C1440E, #FF9933);
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            margin: 2rem 0;
+        }
+
+        .countdown-timer {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .timer-item {
+            background: #3E2723;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+        }
+
+        /* Products Section */
+        .featured-products {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .section-title {
+            text-align: center;
+            font-family: 'Playfair Display', serif;
+            color: #C1440E;
+            font-size: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+
+        .product-info {
+            padding: 1.5rem;
+        }
+
+        .product-title {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: #3E2723;
+        }
+
+        .product-price {
+            color: #C1440E;
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .add-to-cart {
+            width: 100%;
+            background: #3E2723;
+            color: white;
+            border: none;
+            padding: 0.8rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .add-to-cart:hover {
+            background: #C1440E;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            width: 90%;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 2rem;
+            border-radius: 10px;
+            position: relative;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #3E2723;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-content h2 {
+                font-size: 2rem;
+            }
+            
+            .nav-links a {
+                padding: 0.3rem 0.5rem;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Skeleton Loader -->
+    <div class="skeleton-loader" id="skeletonLoader">
+        <div class="skeleton-header"></div>
+        <div class="skeleton-hero"></div>
+        <div class="skeleton-products">
+            <div class="skeleton-product"></div>
+            <div class="skeleton-product"></div>
+            <div class="skeleton-product"></div>
+            <div class="skeleton-product"></div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" id="mainContent">
+        <header>
+            <nav>
+                <div class="logo">
+                    <h1>Madhav Prajapati Art</h1>
+                    <p>Lighting Traditions with Handmade Elegance</p>
+                </div>
+                <div class="nav-links">
+                    <a href="index.html">Home</a>
+                    <a href="shop.html">Shop</a>
+                    <a href="admin.html">Admin</a>
+                    <a href="cart.html" class="cart-icon">
+                        🛒
+                        <span id="cart-count">0</span>
+                    </a>
+                </div>
+            </nav>
+        </header>
+
+        <section class="hero">
+            <div class="hero-content">
+                <h2>Handcrafted Clay Diyas</h2>
+                <p>Illuminate Your Festivals with Tradition</p>
+                <button class="cta-button" onclick="window.location.href='shop.html'">Shop Now</button>
+            </div>
+        </section>
+
+        <!-- Sale Banner with Countdown -->
+        <div class="sale-banner" id="saleBanner">
+            <h3>🎉 Diwali Special Sale! 20% OFF on All Diyas 🎉</h3>
+            <div class="countdown-timer" id="countdown">
+                <div class="timer-item">
+                    <span id="days">00</span>
+                    <span>Days</span>
+                </div>
+                <div class="timer-item">
+                    <span id="hours">00</span>
+                    <span>Hours</span>
+                </div>
+                <div class="timer-item">
+                    <span id="minutes">00</span>
+                    <span>Mins</span>
+                </div>
+                <div class="timer-item">
+                    <span id="seconds">00</span>
+                    <span>Secs</span>
+                </div>
+            </div>
+        </div>
+
+        <section class="featured-products">
+            <h2 class="section-title">Featured Diyas</h2>
+            <div class="products-grid" id="featuredProducts">
+                <!-- Products will be loaded dynamically -->
+            </div>
+        </section>
+    </div>
+
+    <!-- Product Modal -->
+    <div class="modal" id="productModal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal()">&times;</span>
+            <div id="modalContent"></div>
+        </div>
+    </div>
+
+    <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCx72Uz-ll7AgYjK-3wNj4_Q-L8WG2xP60",
+            authDomain: "manymodz-392c0.firebaseapp.com",
+            projectId: "manymodz-392c0",
+            storageBucket: "manymodz-392c0.firebasestorage.app",
+            messagingSenderId: "687043951149",
+            appId: "1:687043951149:web:773d9a1601e5520f8c56a4"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+
+        // Skeleton Loader
+        setTimeout(() => {
+            document.getElementById('skeletonLoader').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('skeletonLoader').style.display = 'none';
+                document.getElementById('mainContent').classList.add('visible');
+            }, 500);
+        }, 2500);
+
+        // Cart Management
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+        function updateCartCount() {
+            const count = cart.reduce((total, item) => total + item.quantity, 0);
+            document.getElementById('cart-count').textContent = count;
+        }
+
+        function addToCart(product) {
+            const existingItem = cart.find(item => item.id === product.id);
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({...product, quantity: 1});
+            }
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartCount();
+            alert('Product added to cart!');
+        }
+
+        // Countdown Timer
+        function updateCountdown() {
+            const diwaliDate = new Date('November 12, 2023 00:00:00').getTime();
+            const now = new Date().getTime();
+            const distance = diwaliDate - now;
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById('days').textContent = String(days).padStart(2, '0');
+            document.getElementById('hours').textContent = String(hours).padStart(2, '0');
+            document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
+            document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+
+            if (distance < 0) {
+                document.getElementById('saleBanner').style.display = 'none';
+            }
+        }
+
+        setInterval(updateCountdown, 100);
+
+        // Load Featured Products
+        async function loadFeaturedProducts() {
+            try {
+                const snapshot = await db.collection('products').limit(4).get();
+                const productsGrid = document.getElementById('featuredProducts');
+                
+                snapshot.forEach(doc => {
+                    const product = { id: doc.id, ...doc.data() };
+                    const productCard = document.createElement('div');
+                    productCard.className = 'product-card';
+                    productCard.innerHTML = `
+                        <img src="${product.imageUrl || 'https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80'}" alt="${product.name}" class="product-image">
+                        <div class="product-info">
+                            <h3 class="product-title">${product.name}</h3>
+                            <p class="product-price">₹${product.price}</p>
+                            <button class="add-to-cart" onclick='addToCart(${JSON.stringify(product)})'>Add to Cart</button>
+                            <button class="add-to-cart" style="margin-top: 0.5rem; background: #D4AF37;" onclick='showProductModal(${JSON.stringify(product)})'>Quick View</button>
+                        </div>
+                    `;
+                    productsGrid.appendChild(productCard);
+                });
+            } catch (error) {
+                console.error('Error loading products:', error);
+                // Fallback products
+                const fallbackProducts = [
+                    { id: 1, name: 'Classic Diya', price: 299, imageUrl: 'https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80' },
+                    { id: 2, name: 'Floral Diya', price: 399, imageUrl: 'https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80' },
+                    { id: 3, name: 'Peacock Diya', price: 499, imageUrl: 'https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80' },
+                    { id: 4, name: 'Lotus Diya', price: 599, imageUrl: 'https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80' }
+                ];
+                
+                fallbackProducts.forEach(product => {
+                    const productCard = document.createElement('div');
+                    productCard.className = 'product-card';
+                    productCard.innerHTML = `
+                        <img src="${product.imageUrl}" alt="${product.name}" class="product-image">
+                        <div class="product-info">
+                            <h3 class="product-title">${product.name}</h3>
+                            <p class="product-price">₹${product.price}</p>
+                            <button class="add-to-cart" onclick='addToCart(${JSON.stringify(product)})'>Add to Cart</button>
+                            <button class="add-to-cart" style="margin-top: 0.5rem; background: #D4AF37;" onclick='showProductModal(${JSON.stringify(product)})'>Quick View</button>
+                        </div>
+                    `;
+                    productsGrid.appendChild(productCard);
+                });
+            }
+        }
+
+        // Product Modal
+        function showProductModal(product) {
+            const modal = document.getElementById('productModal');
+            const modalContent = document.getElementById('modalContent');
+            modalContent.innerHTML = `
+                <img src="${product.imageUrl || 'https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80'}" alt="${product.name}" style="width: 100%; height: 300px; object-fit: cover; border-radius: 10px;">
+                <h2 style="margin: 1rem 0; color: #3E2723;">${product.name}</h2>
+                <p style="color: #C1440E; font-size: 1.5rem; margin-bottom: 1rem;">₹${product.price}</p>
+                <p style="margin-bottom: 1rem;">${product.description || 'Handcrafted with love and tradition. Each diya is unique and made from premium clay.'}</p>
+                <button class="add-to-cart" onclick='addToCart(${JSON.stringify(product)}); closeModal();'>Add to Cart</button>
+            `;
+            modal.style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('productModal').style.display = 'none';
+        }
+
+        // Initialize
+        updateCartCount();
+        loadFeaturedProducts();
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('productModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        }
+    </script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
+</body>
+  </html>
