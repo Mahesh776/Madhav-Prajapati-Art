@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop - Madhav Prajapati Art</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: #F5F5DC;
+        }
+
+        header {
+            background: #3E2723;
+            padding: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo h1 {
+            color: #D4AF37;
+            font-size: 1.5rem;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .logo p {
+            color: #FF9933;
+            font-size: 0.8rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: #F5F5DC;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+        }
+
+        .nav-links a:hover {
+            background: #C1440E;
+        }
+
+        .cart-icon {
+            position: relative;
+        }
+
+        #cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #C1440E;
+            color: white;
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 0.7rem;
+        }
+
+        .shop-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .shop-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .shop-title {
+            font-family: 'Playfair Display', serif;
+            color: #C1440E;
+            font-size: 2rem;
+        }
+
+        .filter-section {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .filter-select {
+            padding: 0.5rem;
+            border: 1px solid #3E2723;
+            border-radius: 5px;
+            background: white;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+
+        .product-info {
+            padding: 1.5rem;
+        }
+
+        .product-title {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: #3E2723;
+        }
+
+        .product-price {
+            color: #C1440E;
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .product-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .add-to-cart, .quick-view {
+            flex: 1;
+            padding: 0.8rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .add-to-cart {
+            background: #3E2723;
+            color: white;
+        }
+
+        .add-to-cart:hover {
+            background: #C1440E;
+        }
+
+        .quick-view {
+            background: #D4AF37;
+            color: #3E2723;
+        }
+
+        .quick-view:hover {
+            background: #FF9933;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            width: 90%;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 2rem;
+            border-radius: 10px;
+            position: relative;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            font-size: 1.2rem;
+            color: #C1440E;
+        }
+
+        @media (max-width: 768px) {
+            .shop-header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .product-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <h1>Madhav Prajapati Art</h1>
+                <p>Lighting Traditions with Handmade Elegance</p>
+            </div>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="shop.html">Shop</a>
+                <a href="admin.html">Admin</a>
+                <a href="cart.html" class="cart-icon">
+                    🛒
+                    <span id="cart-count">0</span>
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <div class="shop-container">
+        <div class="shop-header">
+            <h1 class="shop-title">Our Collection</h1>
+            <div class="filter-section">
+                <select class="filter-select" id="sortFilter">
+                    <option value="default">Sort by</option>
+                    <option value="price-asc">Price: Low to High</option>
+                    <option value="price-desc">Price: High to Low</option>
+                    <option value="name">Name</option>
+                </select>
+                <select class="filter-select" id="categoryFilter">
+                    <option value="all">All Categories</option>
+                    <option value="classic">Classic</option>
+                    <option value="floral">Floral</option>
+                    <option value="peacock">Peacock</option>
+                    <option value="lotus">Lotus</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="products-grid" id="productsGrid"></div>
+    </div>
+
+    <!-- Product Modal -->
+    <div class="modal" id="productModal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal()">&times;</span>
+            <div id="modalContent"></div>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyCx72Uz-ll7AgYjK-3wNj4_Q-L8WG2xP60",
+            authDomain: "manymodz-392c0.firebaseapp.com",
+            projectId: "manymodz-392c0",
+            storageBucket: "manymodz-392c0.firebasestorage.app",
+            messagingSenderId: "687043951149",
+            appId: "1:687043951149:web:773d9a1601e5520f8c56a4"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        let allProducts = [];
+
+        function updateCartCount() {
+            const count = cart.reduce((total, item) => total + item.quantity, 0);
+            document.getElementById('cart-count').textContent = count;
+        }
+
+        function addToCart(product) {
+            const existingItem = cart.find(item => item.id === product.id);
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({...product, quantity: 1});
+            }
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartCount();
+            alert('Product added to cart!');
+        }
+
+        function showProductModal(product) {
+            const modal = document.getElementById('productModal');
+            const modalContent = document.getElementById('modalContent');
+            modalContent.innerHTML = `
+                <img src="${product.imageUrl || 'https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80'}" alt="${product.name}" style="width: 100%; height: 300px; object-fit: cover; border-radius: 10px;">
+                <h2 style="margin: 1rem 0;">${product.name}</h2>
+                <p style="color: #C1440E; font-size: 1.5rem; margin-bottom: 1rem;">₹${product.price}</p>
+                <p style="margin-bottom: 1rem;">${product.description || 'Handcrafted with love and tradition. Each diya is unique and made from premium clay.'}</p>
+                <button class="add-to-cart" onclick='addToCart(${JSON.stringify(product)}); closeModal();'>Add to Cart</button>
+            `;
+            modal.style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('productModal').style.display = 'none';
+        }
+
+        function displayProducts(products) {
+            const grid = document.getElementById('productsGrid');
+            grid.innerHTML = '';
+            
+            products.forEach(product => {
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                card.innerHTML = `
+                    <img src="${product.imageUrl || 'https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80'}" alt="${product.name}" class="product-image">
+                    <div class="product-info">
+                        <h3 class="product-title">${product.name}</h3>
+                        <p class="product-price">₹${product.price}</p>
+                        <div class="product-actions">
+                            <button class="add-to-cart" onclick='addToCart(${JSON.stringify(product)})'>Add to Cart</button>
+                            <button class="quick-view" onclick='showProductModal(${JSON.stringify(product)})'>Quick View</button>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        async function loadProducts() {
+            try {
+                const snapshot = await db.collection('products').get();
+                allProducts = [];
+                snapshot.forEach(doc => {
+                    allProducts.push({ id: doc.id, ...doc.data() });
+                });
+                
+                if (allProducts.length === 0) {
+                    // Fallback products
+                    allProducts = [
+                        { id: '1', name: 'Classic Diya', price: 299, category: 'classic', imageUrl: 'https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80', description: 'Traditional clay diya with elegant design' },
+                        { id: '2', name: 'Floral Diya', price: 399, category: 'floral', imageUrl: 'https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80', description: 'Beautiful flower-shaped diya' },
+                        { id: '3', name: 'Peacock Diya', price: 499, category: 'peacock', imageUrl: 'https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80', description: 'Peacock feather inspired design' },
+                        { id: '4', name: 'Lotus Diya', price: 599, category: 'lotus', imageUrl: 'https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80', description: 'Lotus-shaped diya for special occasions' }
+                    ];
+                }
+                
+                displayProducts(allProducts);
+            } catch (error) {
+                console.error('Error loading products:', error);
+            }
+        }
+
+        // Filter and sort functionality
+        document.getElementById('sortFilter').addEventListener('change', function(e) {
+            let filtered = [...allProducts];
+            
+            // Apply category filter
+            const category = document.getElementById('categoryFilter').value;
+            if (category !== 'all') {
+                filtered = filtered.filter(p => p.category === category);
+            }
+            
+            // Apply sorting
+            switch(e.target.value) {
+                case 'price-asc':
+                    filtered.sort((a, b) => a.price - b.price);
+                    break;
+                case 'price-desc':
+                    filtered.sort((a, b) => b.price - a.price);
+                    break;
+                case 'name':
+                    filtered.sort((a, b) => a.name.localeCompare(b.name));
+                    break;
+            }
+            
+            displayProducts(filtered);
+        });
+
+        document.getElementById('categoryFilter').addEventListener('change', function(e) {
+            let filtered = [...allProducts];
+            
+            if (e.target.value !== 'all') {
+                filtered = filtered.filter(p => p.category === e.target.value);
+            }
+            
+            // Apply current sort
+            const sort = document.getElementById('sortFilter').value;
+            switch(sort) {
+                case 'price-asc':
+                    filtered.sort((a, b) => a.price - b.price);
+                    break;
+                case 'price-desc':
+                    filtered.sort((a, b) => b.price - a.price);
+                    break;
+                case 'name':
+                    filtered.sort((a, b) => a.name.localeCompare(b.name));
+                    break;
+            }
+            
+            displayProducts(filtered);
+        });
+
+        // Initialize
+        updateCartCount();
+        loadProducts();
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('productModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>

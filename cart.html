@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart - Madhav Prajapati Art</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: #F5F5DC;
+        }
+
+        header {
+            background: #3E2723;
+            padding: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo h1 {
+            color: #D4AF37;
+            font-size: 1.5rem;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .logo p {
+            color: #FF9933;
+            font-size: 0.8rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: #F5F5DC;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+        }
+
+        .nav-links a:hover {
+            background: #C1440E;
+        }
+
+        .cart-icon {
+            position: relative;
+        }
+
+        #cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #C1440E;
+            color: white;
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 0.7rem;
+        }
+
+        .cart-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .cart-title {
+            font-family: 'Playfair Display', serif;
+            color: #C1440E;
+            font-size: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .cart-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+        }
+
+        .cart-items {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        .cart-item {
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            gap: 1rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+
+        .cart-item-image {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+
+        .cart-item-details h3 {
+            color: #3E2723;
+            margin-bottom: 0.5rem;
+        }
+
+        .cart-item-price {
+            color: #C1440E;
+            font-weight: bold;
+        }
+
+        .cart-item-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            align-items: flex-end;
+        }
+
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .quantity-btn {
+            background: #3E2723;
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .quantity-btn:hover {
+            background: #C1440E;
+        }
+
+        .quantity-input {
+            width: 50px;
+            text-align: center;
+            padding: 0.3rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .remove-btn {
+            background: none;
+            border: none;
+            color: #C1440E;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .cart-summary {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            height: fit-content;
+        }
+
+        .summary-title {
+            font-size: 1.3rem;
+            color: #3E2723;
+            margin-bottom: 1rem;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .summary-total {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #C1440E;
+        }
+
+        .coupon-section {
+            margin: 1rem 0;
+        }
+
+        .coupon-input {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .coupon-input input {
+            flex: 1;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .apply-coupon {
+            background: #D4AF37;
+            color: #3E2723;
+            border: none;
+            padding: 0.8rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .apply-coupon:hover {
+            background: #FF9933;
+        }
+
+        .coupon-message {
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            color: #C1440E;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            background: #C1440E;
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 5px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+
+        .checkout-btn:hover {
+            background: #FF9933;
+        }
+
+        .empty-cart {
+            text-align: center;
+            padding: 3rem;
+        }
+
+        .empty-cart h3 {
+            color: #3E2723;
+            margin-bottom: 1rem;
+        }
+
+        .shop-now-btn {
+            background: #C1440E;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .cart-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .cart-item {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            
+            .cart-item-image {
+                margin: 0 auto;
+            }
+            
+            .cart-item-actions {
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <h1>Madhav Prajapati Art</h1>
+                <p>Lighting Traditions with Handmade Elegance</p>
+            </div>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="shop.html">Shop</a>
+                <a href="admin.html">Admin</a>
+                <a href="cart.html" class="cart-icon">
+                    🛒
+                    <span id="cart-count">0</span>
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <div class="cart-container">
+        <h1 class="cart-title">Your Shopping Cart</h1>
+        
+        <div class="cart-content" id="cartContent">
+            <!-- Cart items will be loaded here -->
+        </div>
+    </div>
+
+    <script>
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        let couponApplied = false;
+        let discount = 0;
+
+        function updateCartCount() {
+            const count = cart.reduce((total, item) => total + item.quantity, 0);
+            document.getElementById('cart-count').textContent = count;
+        }
+
+        function calculateSubtotal() {
+            return cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+        }
+
+        function calculateTotal() {
+            const subtotal = calculateSubtotal();
+            return subtotal - discount;
+        }
+
+        function updateCartDisplay() {
+            const cartContent = document.getElementById('cartContent');
+            
+            if (cart.length === 0) {
+                cartContent.innerHTML = `
+                    <div class="empty-cart">
+                        <h3>Your cart is empty</h3>
+                        <button class="shop-now-btn" onclick="window.location.href='shop.html'">Shop Now</button>
+                    </div>
+                `;
+                return;
+            }
+
+            const subtotal = calculateSubtotal();
+            const total = calculateTotal();
+
+            cartContent.innerHTML = `
+                <div class="cart-items" id="cartItems">
+                    ${cart.map(item => `
+                        <div class="cart-item" data-id="${item.id}">
+                            <img src="${item.imageUrl || 'https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80'}" alt="${item.name}" class="cart-item-image">
+                            <div class="cart-item-details">
+                                <h3>${item.name}</h3>
+                                <p class="cart-item-price">₹${item.price}</p>
+                            </div>
+                            <div class="cart-item-actions">
+                                <div class="quantity-control">
+                                    <button class="quantity-btn" onclick="updateQuantity('${item.id}', -1)">-</button>
+                                    <input type="number" class="quantity-input" value="${item.quantity}" min="1" onchange="updateQuantityInput('${item.id}', this.value)">
+                                    <button class="quantity-btn" onclick="updateQuantity('${item.id}', 1)">+</button>
+                                </div>
+                                <button class="remove-btn" onclick="removeItem('${item.id}')">Remove</button>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+                <div class="cart-summary">
+                    <h2 class="summary-title">Order Summary</h2>
+                    <div class="summary-row">
+                        <span>Subtotal</span>
+                        <span>₹${subtotal}</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Discount</span>
+                        <span>₹${discount}</span>
+                    </div>
+                    <div class="summary-row summary-total">
+                        <span>Total</span>
+                        <span>₹${total}</span>
+                    </div>
+                    
+                    <div class="coupon-section">
+                        <div class="coupon-input">
+                            <input type="text" id="couponCode" placeholder="Enter coupon code" value="DIWALI20">
+                            <button class="apply-coupon" onclick="applyCoupon()">Apply</button>
+                        </div>
+                        <div id="couponMessage" class="coupon-message"></div>
+                    </div>
+                    
+                    <button class="checkout-btn" onclick="proceedToCheckout()">Proceed to Checkout</button>
+                </div>
+            `;
+        }
+
+        function updateQuantity(productId, change) {
+            const item = cart.find(item => item.id === productId);
+            if (item) {
+                item.quantity += change;
+                if (item.quantity < 1) {
+                    removeItem(productId);
+                } else {
+                    localStorage.setItem('cart', JSON.stringify(cart));
+                    updateCartDisplay();
+                    updateCartCount();
+                }
+            }
+        }
+
+        function updateQuantityInput(productId, value) {
+            const item = cart.find(item => item.id === productId);
+            if (item) {
+                item.quantity = parseInt(value) || 1;
+                localStorage.setItem('cart', JSON.stringify(cart));
+                updateCartDisplay();
+                updateCartCount();
+            }
+        }
+
+        function removeItem(productId) {
+            cart = cart.filter(item => item.id !== productId);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartDisplay();
+            updateCartCount();
+        }
+
+        function applyCoupon() {
+            const couponCode = document.getElementById('couponCode').value;
+            const messageEl = document.getElementById('couponMessage');
+            
+            // Valid coupons
+            const validCoupons = {
+                'DIWALI20': 0.2, // 20% off
+                'FESTIVE10': 0.1, // 10% off
+                'SAVE50': 50 // ₹50 off
+            };
+
+            if (validCoupons[couponCode]) {
+                const subtotal = calculateSubtotal();
+                
+                if (couponCode === 'SAVE50') {
+                    discount = Math.min(50, subtotal);
+                } else {
+                    discount = subtotal * validCoupons[couponCode];
+                }
+                
+                couponApplied = true;
+                messageEl.style.color = 'green';
+                messageEl.textContent = 'Coupon applied successfully!';
+            } else {
+                discount = 0;
+                couponApplied = false;
+                messageEl.style.color = '#C1440E';
+                messageEl.textContent = 'Invalid coupon code!';
+            }
+            
+            updateCartDisplay();
+        }
+
+        function proceedToCheckout() {
+            if (cart.length === 0) {
+                alert('Your cart is empty!');
+                return;
+            }
+            window.location.href = 'checkout.html';
+        }
+
+        // Initialize
+        updateCartDisplay();
+        updateCartCount();
+    </script>
+</body>
+</html>

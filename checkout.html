@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - Madhav Prajapati Art</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: #F5F5DC;
+        }
+
+        header {
+            background: #3E2723;
+            padding: 1rem;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo h1 {
+            color: #D4AF37;
+            font-size: 1.5rem;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .logo p {
+            color: #FF9933;
+            font-size: 0.8rem;
+        }
+
+        .nav-links a {
+            color: #F5F5DC;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+        }
+
+        .checkout-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+        }
+
+        .checkout-form {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        .form-title {
+            font-family: 'Playfair Display', serif;
+            color: #C1440E;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #3E2723;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #C1440E;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .order-summary {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            height: fit-content;
+        }
+
+        .summary-items {
+            margin: 1rem 0;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .summary-total {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #C1440E;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 2px solid #3E2723;
+        }
+
+        .pay-btn {
+            width: 100%;
+            background: #C1440E;
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 5px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+
+        .pay-btn:hover {
+            background: #FF9933;
+        }
+
+        .error-message {
+            color: #C1440E;
+            font-size: 0.9rem;
+            margin-top: 0.3rem;
+        }
+
+        @media (max-width: 768px) {
+            .checkout-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <h1>Madhav Prajapati Art</h1>
+                <p>Lighting Traditions with Handmade Elegance</p>
+            </div>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="shop.html">Shop</a>
+                <a href="cart.html">Cart</a>
+            </div>
+        </nav>
+    </header>
+
+    <div class="checkout-container">
+        <div class="checkout-form">
+            <h2 class="form-title">Shipping Information</h2>
+            
+            <div class="form-group">
+                <label>Full Name *</label>
+                <input type="text" id="fullName" required>
+            </div>
+
+            <div class="form-group">
+                <label>Email *</label>
+                <input type="email" id="email" required>
+            </div>
+
+            <div class="form-group">
+                <label>Phone *</label>
+                <input type="tel" id="phone" required>
+            </div>
+
+            <div class="form-group">
+                <label>Address *</label>
+                <input type="text" id="address" required>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>City *</label>
+                    <input type="text" id="city" required>
+                </div>
+                <div class="form-group">
+                    <label>Pincode *</label>
+                    <input type="text" id="pincode" required>
+                </div>
+            </div>
+        </div>
+
+        <div class="order-summary">
+            <h2 class="form-title">Order Summary</h2>
+            <div class="summary-items" id="orderItems"></div>
+            <div class="summary-total" id="orderTotal"></div>
+            
+            <button class="pay-btn" onclick="processPayment()">Pay with Razorpay</button>
+        </div>
+    </div>
+
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyCx72Uz-ll7AgYjK-3wNj4_Q-L8WG2xP60",
+            authDomain: "manymodz-392c0.firebaseapp.com",
+            projectId: "manymodz-392c0",
+            storageBucket: "manymodz-392c0.firebasestorage.app",
+            messagingSenderId: "687043951149",
+            appId: "1:687043951149:web:773d9a1601e5520f8c56a4"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+        function displayOrderSummary() {
+            const orderItems = document.getElementById('orderItems');
+            const subtotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+            
+            orderItems.innerHTML = cart.map(item => `
+                <div class="summary-item">
+                    <span>${item.name} x ${item.quantity}</span>
+                    <span>₹${item.price * item.quantity}</span>
+                </div>
+            `).join('');
+            
+            document.getElementById('orderTotal').textContent = `Total: ₹${subtotal}`;
+        }
+
+        function validateForm() {
+            const fields = ['fullName', 'email', 'phone', 'address', 'city', 'pincode'];
+            let isValid = true;
+            
+            fields.forEach(field => {
+                const input = document.getElementById(field);
+                if (!input.value.trim()) {
+                    input.style.borderColor = '#C1440E';
+                    isValid = false;
+                } else {
+                    input.style.borderColor = '#ddd';
+                }
+            });
+            
+            return isValid;
+        }
+
+        async function processPayment() {
+            if (!validateForm()) {
+                alert('Please fill all required fields');
+                return;
+            }
+
+            if (cart.length === 0) {
+                alert('Your cart is empty!');
+                return;
+            }
+
+            const amount = cart.reduce((total, item) => total + (item.price * item.quantity), 0) * 100; // in paise
+
+            // Create order on server
+            try {
+                const response = await fetch('http://localhost:3000/create-order', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ amount })
+                });
+
+                const order = await response.json();
+
+                const options = {
+                    key: 'rzp_test_YOUR_KEY_HERE', // Replace with your Razorpay key
+                    amount: order.amount,
+                    currency: 'INR',
+                    name: 'Madhav Prajapati Art',
+                    description: 'Handmade Clay Diyas',
+                    order_id: order.id,
+                    handler: async function(response) {
+                        // Verify payment
+                        const verifyResponse = await fetch('http://localhost:3000/verify-payment', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                orderId: response.razorpay_order_id,
+                                paymentId: response.razorpay_payment_id,
+                                signature: response.razorpay_signature
+                            })
+                        });
+
+                        const verification = await verifyResponse.json();
+
+                        if (verification.verified) {
+                            // Save order to Firebase
+                            const orderData = {
+                                customer: {
+                                    name: document.getElementById('fullName').value,
+                                    email: document.getElementById('email').value,
+                                    phone: document.getElementById('phone').value,
+                                    address: document.getElementById('address').value,
+                                    city: document.getElementById('city').value,
+                                    pincode: document.getElementById('pincode').value
+                                },
+                                items: cart,
+                                total: amount / 100,
+                                paymentId: response.razorpay_payment_id,
+                                orderId: response.razorpay_order_id,
+                                status: 'completed',
+                                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                            };
+
+                            await db.collection('orders').add(orderData);
+                            
+                            // Clear cart
+                            localStorage.removeItem('cart');
+                            
+                            alert('Payment successful! Order placed.');
+                            window.location.href = 'index.html';
+                        } else {
+                            alert('Payment verification failed!');
+                        }
+                    },
+                    prefill: {
+                        name: document.getElementById('fullName').value,
+                        email: document.getElementById('email').value,
+                        contact: document.getElementById('phone').value
+                    },
+                    theme: {
+                        color: '#C1440E'
+                    }
+                };
+
+                const razorpay = new Razorpay(options);
+                razorpay.open();
+
+            } catch (error) {
+                console.error('Payment error:', error);
+                alert('Error processing payment. Please try again.');
+            }
+        }
+
+        displayOrderSummary();
+    </script>
+</body>
+</html>
